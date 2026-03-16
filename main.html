@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Text Animation Test</title>
+
+<style>
+
+body{
+margin:0;
+font-family:sans-serif;
+background:#f5f5f5;
+color:#111;
+overflow-x:hidden;
+}
+
+/* 네비 테스트 */
+.nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:60px;
+background:#fff;
+display:flex;
+gap:20px;
+align-items:center;
+padding-left:20px;
+z-index:1000;
+}
+
+.nav div{
+padding:6px 12px;
+border:1px solid #111;
+}
+
+/* 스크롤 영역 */
+.scroll-area{
+height:900vh;
+}
+
+/* 텍스트 섹션 */
+.word-stage{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:100%;
+pointer-events:none;
+}
+
+.word{
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+font-size:64px;
+font-weight:600;
+white-space:nowrap;
+opacity:0;
+}
+
+/* 좌우 위치 */
+.left{
+transform:translate(-60% ,0);
+text-align:right;
+}
+
+.right{
+transform:translate(-40% ,0);
+text-align:left;
+}
+
+/* 영상 */
+.center-video{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:300px;
+z-index:-1;
+}
+
+.center-video video{
+width:100%;
+}
+
+.overview{
+position:relative;
+margin-top:920vh;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+font-size:18px;
+line-height:1.8;
+padding:40px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+<div>Nav</div>
+<div>Nav</div>
+<div>Nav</div>
+</div>
+
+<div class="scroll-area"></div>
+
+<div class="center-video">
+<video autoplay muted loop>
+<source src="video.mp4" type="video/mp4">
+</video>
+</div>
+
+<div class="word-stage" id="stage"></div>
+
+<div class="overview">
+
+<p>대구·경북 지역에서 북 디자인 전시는 여전히 드뭅니다.</p>
+
+<p>졸업 전시를 제외하면 학생들이 자신의 책을 선보이고  
+관람객과 직접 소통할 기회는 더욱 부족합니다.</p>
+
+<p>NON-BARCODE DUMMY BOOK FESTIVAL은  
+이러한 고민에서 시작되었습니다.</p>
+
+<p>대학생들의 독립적인 작업물을 한자리에 모아 함께 읽고  
+이야기하고 싶은 마음, 그 진심을 담았습니다.</p>
+
+<p>완벽히 매듭지어진 출판물 대신  
+실험과 고민 그리고 수많은 시도의 흔적이 고스란히 담긴  
+더미북 DUMMY BOOK들을 소개합니다.</p>
+
+</div>
+
+<script>
+
+const words = [
+"You",
+"Designer",
+"Student",
+"Publisher",
+"Editor",
+"Book Lover",
+"Writer",
+"Someone"
+];
+
+const stage = document.getElementById("stage");
+
+words.forEach((word,i)=>{
+const el = document.createElement("div");
+el.className = "word " + (i%2===0?"left":"right");
+el.innerText = word;
+stage.appendChild(el);
+});
+
+const wordEls = document.querySelectorAll(".word");
+
+window.addEventListener("scroll",()=>{
+
+const scrollY = window.scrollY;
+const total = document.body.scrollHeight - window.innerHeight;
+const progress = scrollY/total;
+
+const segment = 1/words.length;
+
+wordEls.forEach((el,i)=>{
+
+const start = segment*i;
+const end = start + segment;
+
+const local = (progress-start)/(segment);
+
+if(local>0 && local<1){
+
+let y;
+let opacity;
+
+if(local<0.3){
+y = 100 - (local/0.3)*100;
+opacity = local/0.3;
+}
+else if(local<0.7){
+y = 0;
+opacity = 1;
+}
+else{
+y = -((local-0.7)/0.3)*100;
+opacity = 1 - (local-0.7)/0.3;
+}
+
+el.style.opacity = opacity;
+el.style.transform = `translate(-50%, ${y}px)`;
+
+}else{
+
+el.style.opacity=0;
+
+}
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
