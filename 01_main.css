@@ -3,6 +3,12 @@
   margin: 0;
   padding: 0;
 }
+@font-face {
+  font-family: 'Nonbarcode';
+  src: url('../fonts/Nonbarcode_bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 :root {
   --nav-width: 380px;
@@ -306,24 +312,6 @@ body {
   font-size: clamp(44px, 5vw, 96px);
   color: var(--brown);
   line-height: 1;
-}
-
-.barcode {
-  width: min(42vw, 520px);
-  height: 68px;
-  background: repeating-linear-gradient(
-    90deg,
-    #ee3a4b 0 4px,
-    transparent 4px 7px,
-    #3f8df6 7px 10px,
-    transparent 10px 13px,
-    #5b1f14 13px 17px,
-    transparent 17px 20px,
-    #ff7a00 20px 24px,
-    transparent 24px 28px,
-    #ea5cff 28px 31px,
-    transparent 31px 36px
-  );
 }
 
 /* 셋째 줄 */
