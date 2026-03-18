@@ -46,11 +46,10 @@ body {
 
 /* 메뉴 */
 #navi-menu {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   margin: 10px 20px 0;
-  min-height: 0;
 }
 
 #navi-menu-text {
@@ -65,14 +64,15 @@ body {
 
 .navi-list {
   list-style: none;
-  flex: 1;
+  margin-top: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  min-height: 0;
+  align-items: center;
+  gap: clamp(25px, 3vh, 42px);
 }
 
 .navi-list li {
+  width: 100%;
   height: 35px;
   flex-shrink: 0;
   background-repeat: no-repeat;
@@ -98,6 +98,7 @@ body {
 
 /* 하단 전체 */
 #navi-footer {
+  margin-top: auto;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -122,74 +123,38 @@ body {
   background-size: contain;
   background-position: center;
 }
-@media (max-height: 660px) {
-  #thx {
-    display: none;
-  }
 
-  #navi-top {
-    height: 125px;
-  }
-
-  #navi-menu {
-    margin: 4px 14px 0;
-  }
-
-  #navi-menu-text {
-    margin: 8px 18px 6px;
-    height: 20px;
-  }
-
-  .navi-list {
-    justify-content: space-around;
-  }
-
-  .navi-list li {
-    height: 22px;
-  }
-}
-@media (max-height: 740px) {
-  #navi-contact {
-    display: none;
-  }
-
-  #thx {
-    height: 110px;
-  }
-
-  .navi-list li {
-    height: 24px;
-  }
-}
-@media (max-height: 820px) {
+/* 높이가 충분히 클 때: 메뉴 말고 하단 여백이 늘어나게 */
+@media (min-height: 1130px) {
   #navi {
-    padding: 14px;
+    padding: 20px;
   }
 
   #navi-container {
-    padding: 18px 0 14px;
+    padding-top: 34px;
+    padding-bottom: 36px;
   }
-
-  #navi-top {
-    height: 155px;
-  }
-
   #navi-menu-text {
-    margin: 12px 24px 8px;
+    margin: 48px 28px 10px;
   }
-
-  .navi-list li {
-    height: 28px;
+  .navi-list {
+    padding-top: 40px;
+    gap: 50px;
+  }
+  #navi-footer {
+    padding-top: 28px;
   }
 
   #thx {
-    height: 135px;
+    margin: 12px 10px 0;
   }
 
   #navi-bottom {
-    display: none;
+    margin: 18px 20px 0;
   }
 }
+
+/* 920 이하 */
 @media (max-height: 920px) {
   #navi {
     padding: 16px;
@@ -209,7 +174,11 @@ body {
   }
 
   #navi-menu-text {
-    margin: 16px 28px 10px;
+    margin: 16px 28px 0px;
+  }
+
+  .navi-list {
+    gap: 25px;
   }
 
   .navi-list li {
@@ -224,6 +193,32 @@ body {
   #navi-bottom {
     height: 125px;
     margin: 8px 16px 0;
+  }
+}
+
+/* 820 이하 */
+@media (max-height: 820px) {
+
+  #thx {
+    height: 135px;
+  }
+
+  #navi-bottom {
+    display: none;
+  }
+}
+
+/* 740 이하 */
+@media (max-height: 740px) {
+  #thx {
+    height: 110px;
+  }
+}
+
+/* 740 이하 */
+@media (max-height: 620px) {
+  #thx {
+    display: none;
   }
 }
 
