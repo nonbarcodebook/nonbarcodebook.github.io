@@ -130,6 +130,127 @@ body {
   background-position: center;
 }
 
+/* 오른쪽 본문 */
+#content {
+  margin-left: var(--nav-width);
+  width: calc(100% - var(--nav-width));
+  min-height: 100vh;
+}
+
+/* 히어로 전체 */
+#hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 위 여백 */
+.hero-top-space {
+  height: 36vh;
+  width: 100%;
+}
+
+/* 공통 밴드 */
+.band {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+/* 색상 */
+.pink {
+  background: #f5a0be; /* 임시, 나중에 원하는 색으로 교체 */
+}
+
+.blue {
+  background: #a9eef7; /* 임시 */
+}
+
+/* 첫 줄 */
+.band-1 {
+  height: 14vh;
+}
+
+.band-1 h1 {
+  font-size: clamp(48px, 6vw, 110px);
+  color: var(--brown);
+  line-height: 1;
+}
+
+/* 둘째 줄 */
+.band-2 {
+  height: 14vh;
+}
+
+.band-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.band-2 h2 {
+  font-size: clamp(44px, 5vw, 96px);
+  color: var(--brown);
+  line-height: 1;
+}
+
+.barcode-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.barcode-wrap span {
+  font-size: clamp(44px, 5vw, 96px);
+  color: var(--brown);
+  line-height: 1;
+}
+
+.barcode {
+  background-image: url("./02_Images/02_Hero/Hero_Barcode.png");
+  height: 100px;
+  width: 500px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+/* 셋째 줄 */
+.band-3 {
+  height: 14vh;
+}
+
+.bottom-words {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom-words h2 {
+  font-size: clamp(44px, 5vw, 96px);
+  color: var(--brown);
+  line-height: 1;
+  width: 50%;
+}
+
+.bottom-words h2:first-child {
+  text-align: center;
+}
+
+.bottom-words h2:last-child {
+  text-align: right;
+}
+
 /* 높이가 충분히 클 때: 메뉴 말고 하단 여백이 늘어나게 */
 @media (min-height: 1130px) {
   #navi {
@@ -226,117 +347,4 @@ body {
   #thx {
     display: none;
   }
-}
-
-
-/* 오른쪽 본문 */
-#content {
-  margin-left: var(--nav-width);
-  width: calc(100% - var(--nav-width));
-  min-height: 100vh;
-}
-
-/* 히어로 전체 */
-#hero {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-}
-
-/* 위 여백 */
-.hero-top-space {
-  height: 36vh;
-  width: 100%;
-}
-
-/* 공통 밴드 */
-.band {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 28px;
-  padding-right: 28px;
-}
-
-/* 색상 */
-.pink {
-  background: #f5a0be; /* 임시, 나중에 원하는 색으로 교체 */
-}
-
-.blue {
-  background: #a9eef7; /* 임시 */
-}
-
-/* 첫 줄 */
-.band-1 {
-  height: 14vh;
-}
-
-.band-1 h1 {
-  font-size: clamp(48px, 6vw, 110px);
-  color: var(--brown);
-  line-height: 1;
-}
-
-/* 둘째 줄 */
-.band-2 {
-  height: 14vh;
-}
-
-.band-inner {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.band-2 h2 {
-  font-size: clamp(44px, 5vw, 96px);
-  color: var(--brown);
-  line-height: 1;
-}
-
-.barcode-wrap {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.barcode-wrap span {
-  font-size: clamp(44px, 5vw, 96px);
-  color: var(--brown);
-  line-height: 1;
-}
-
-/* 셋째 줄 */
-.band-3 {
-  height: 14vh;
-}
-
-.bottom-words {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.bottom-words h2 {
-  font-size: clamp(44px, 5vw, 96px);
-  color: var(--brown);
-  line-height: 1;
-  width: 50%;
-}
-
-.bottom-words h2:first-child {
-  text-align: center;
-}
-
-.bottom-words h2:last-child {
-  text-align: right;
 }
