@@ -9,6 +9,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'NANUM';
+  src: url('./03_Font/NanumSquareB.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 :root {
   --nav-width: 380px;
@@ -140,13 +146,19 @@ body {
 /* 히어로 전체 */
 #hero {
   position: relative;
-  font-family: 'Nonbarcode';
   width: 100%;
   min-height: 100vh;
   background: var(--bg);
   display: flex;
   flex-direction: column;
 }
+.hero-text {
+  font-size: 20px;
+  font-family: 'NANUM';
+  margin: 20px;
+  color: #5b1e13;
+}
+
 
 
 /* 높이가 충분히 클 때: 메뉴 말고 하단 여백이 늘어나게 */
