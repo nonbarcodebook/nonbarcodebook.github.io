@@ -3,12 +3,14 @@
   margin: 0;
   padding: 0;
 }
+
 @font-face {
   font-family: 'Nonbarcode';
   src: url('../fonts/Nonbarcode_bold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'NANUM';
   src: url('./03_Font/NanumSquareB.otf') format('opentype');
@@ -19,10 +21,30 @@
 :root {
   --nav-width: 380px;
   --brown: #5b1e13;
+  --bg: #f2f2f2;
+
+  --hero-font: clamp(11px, 0.92vw, 20px);
+  --hero-line: 1.58;
+  --hero-gap: clamp(10px, 1vw, 18px);
+
+  --overlay-font: clamp(22px, 2vw, 62px);
+  --overlay-font-small: clamp(18px, 1.5vw, 40px);
+
+  --cursor-size: 20px; /* 기존 12px → 20~28px 추천 */
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
 }
 
 body {
-  background: #f2f2f2;
+  font-family: 'NANUM', sans-serif;
+  color: var(--brown);
+  cursor: default;
 }
 
 /* 왼쪽 고정 네비 */
@@ -33,6 +55,7 @@ body {
   width: var(--nav-width);
   height: 100vh;
   padding: 20px;
+  z-index: 50;
 }
 
 /* 네비 전체 박스 */
@@ -140,28 +163,183 @@ body {
 #content {
   margin-left: var(--nav-width);
   width: calc(100% - var(--nav-width));
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* 히어로 전체 */
 #hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  background: var(--bg);
+  height: 100vh;
+  overflow: hidden;
+  padding: 20px 28px 20px 10px;
+}
+
+/* 오른쪽 내부 기준 박스 */
+.hero-inner {
+  position: relative;
+  width: min(100%, 1250px);
+  height: 100%;
+  margin-left: 0;
+  margin-right: auto;
+  padding: clamp(10px, 1.4vw, 24px) clamp(18px, 2vw, 34px);
+}
+
+/* 배경 글 */
+.hero-bg-text {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  gap: var(--hero-gap);
+  overflow: hidden;
 }
+
 .hero-text {
-  font-size: 20px;
-  font-family: 'NANUM';
-  margin: 20px;
-  color: #5b1e13;
+  color: var(--brown);
+  opacity: 0.25;
+  font-family: 'NANUM', sans-serif;
+  font-size: var(--hero-font);
+  line-height: var(--hero-line);
+  letter-spacing: -0.02em;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
 }
 
+.hero-text p {
+  margin: 0;
+  width: 100%;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
 
+/* 오버레이 전체 */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
 
-/* 높이가 충분히 클 때: 메뉴 말고 하단 여백이 늘어나게 */
+/* 바코드 카드 */
+.barcode-card {
+  position: absolute;
+  width: clamp(180px, 22vw, 420px);
+  height: clamp(42px, 4.8vw, 90px);
+  pointer-events: auto;
+  cursor: none;
+}
+
+/* 바코드 이미지 */
+.barcode-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #7d1f12 0 2px,
+    #ff4c65 2px 5px,
+    #f58c33 5px 7px,
+    #e8d7c3 7px 10px,
+    #3f8df6 10px 12px,
+    #5b1e13 12px 15px,
+    #ff2f59 15px 18px
+  );
+  box-shadow: 0 0 0 1px rgba(91, 30, 19, 0.12);
+  opacity: 1;
+  transform: scaleX(1);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* 큰 텍스트 */
+.barcode-card::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--brown);
+  font-family: 'Nonbarcode', 'NANUM', sans-serif;
+  font-size: var(--overlay-font);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* 작은 텍스트가 필요한 카드 */
+.barcode-card.small-text::after {
+  font-size: var(--overlay-font-small);
+}
+
+/* hover 후 reveal 상태 */
+.barcode-card.is-revealed::before {
+  opacity: 0;
+  transform: scaleX(0.94);
+}
+
+.barcode-card.is-revealed::after {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+
+/* 위치값 */
+.pos-1 {
+  top: 24%;
+  left: 4%;
+  width: clamp(240px, 23vw, 430px);
+}
+
+.pos-2 {
+  top: 33%;
+  right: 3%;
+  width: clamp(250px, 24vw, 460px);
+}
+
+.pos-3 {
+  top: 47%;
+  left: 5%;
+  width: clamp(180px, 16vw, 320px);
+}
+
+.pos-4 {
+  top: 73%;
+  left: 41%;
+  width: clamp(170px, 16vw, 300px);
+}
+
+.pos-5 {
+  top: 83%;
+  right: 1%;
+  width: clamp(260px, 31vw, 520px);
+}
+
+/* 커서 점 */
+#cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border-radius: 50%;
+  background: #3f8df6;
+  opacity: 0.8;                 /* 살짝 투명 */
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate3d(-999px, -999px, 0);
+  will-change: transform;
+  mix-blend-mode: multiply;     /* 선택사항 (좀 더 자연스럽게) */
+}
+
+/* 창이 충분히 클 때 */
 @media (min-height: 1130px) {
   #navi {
     padding: 20px;
@@ -171,13 +349,16 @@ body {
     padding-top: 34px;
     padding-bottom: 36px;
   }
+
   #navi-menu-text {
     margin: 48px 28px 10px;
   }
+
   .navi-list {
     padding-top: 40px;
     gap: 50px;
   }
+
   #navi-footer {
     padding-top: 28px;
   }
@@ -191,7 +372,7 @@ body {
   }
 }
 
-/* 920 이하 */
+/* 높이 920 이하 */
 @media (max-height: 920px) {
   #navi {
     padding: 16px;
@@ -211,7 +392,7 @@ body {
   }
 
   #navi-menu-text {
-    margin: 16px 28px 0px;
+    margin: 16px 28px 0;
   }
 
   .navi-list {
@@ -233,9 +414,7 @@ body {
   }
 }
 
-/* 820 이하 */
 @media (max-height: 820px) {
-
   #thx {
     height: 135px;
   }
@@ -245,16 +424,87 @@ body {
   }
 }
 
-/* 740 이하 */
 @media (max-height: 740px) {
   #thx {
     height: 110px;
   }
 }
 
-/* 740 이하 */
 @media (max-height: 620px) {
   #thx {
     display: none;
+  }
+}
+
+/* 가로폭 1440 이하 */
+@media (max-width: 1440px) {
+  :root {
+    --hero-font: clamp(10px, 0.82vw, 17px);
+    --hero-gap: clamp(8px, 0.9vw, 15px);
+    --overlay-font: clamp(20px, 1.8vw, 50px);
+    --overlay-font-small: clamp(16px, 1.25vw, 32px);
+  }
+
+  .hero-inner {
+    width: min(100%, 1120px);
+  }
+}
+
+/* 가로폭 1280 이하 */
+@media (max-width: 1280px) {
+  :root {
+    --nav-width: 340px;
+    --hero-font: clamp(9px, 0.75vw, 15px);
+    --hero-gap: clamp(6px, 0.8vw, 12px);
+    --overlay-font: clamp(16px, 1.5vw, 38px);
+    --overlay-font-small: clamp(14px, 1.05vw, 26px);
+  }
+
+  #navi-container {
+    width: 280px;
+  }
+
+  #hero {
+    padding: 18px 18px 18px 6px;
+  }
+
+  .hero-inner {
+    width: min(100%, 980px);
+    padding: 14px 18px;
+  }
+
+  .pos-1 {
+    left: 4%;
+  }
+
+  .pos-2 {
+    right: 2%;
+  }
+
+  .pos-4 {
+    left: 39%;
+  }
+
+  .pos-5 {
+    right: 0;
+  }
+}
+
+/* 가로폭 1100 이하 */
+@media (max-width: 880px) {
+  :root {
+    --overlay-font: clamp(14px, 1.35vw, 30px);
+    --overlay-font-small: clamp(12px, 0.95vw, 22px);
+  }
+
+  .hero-inner {
+    width: min(100%, 900px);
+  }
+
+  .barcode-card {
+    height: clamp(34px, 4vw, 68px);
+  }
+  #navi-container {
+    width: 180px;
   }
 }

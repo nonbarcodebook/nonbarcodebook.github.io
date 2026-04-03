@@ -1,101 +1,39 @@
-const words = [
-  "You",
-  "Designer",
-  "Student",
-  "Publisher",
-  "Editor",
-  "Book Lover",
-  "Writer",
-  "Someone"
-];
+const barcodeCards = document.querySelectorAll(".barcode-card");
+const cursorDot = document.getElementById("cursor-dot");
 
-const heroScroll = document.getElementById("heroScroll");
-const leftWordStack = document.getElementById("leftWordStack");
-const rightWordStack = document.getElementById("rightWordStack");
-const fadeBlocks = document.querySelectorAll(".fade-block");
+barcodeCards.forEach((card) => {
+  let resetTimer = null;
 
-const wordElements = [];
+  card.addEventListener("mouseenter", () => {
+    if (card.classList.contains("is-revealed")) return;
 
-words.forEach((word, index) => {
-  const el = document.createElement("div");
-  el.className = "word";
-  el.textContent = word;
+    card.classList.add("is-revealed");
 
-  if (index % 2 === 0) {
-    leftWordStack.appendChild(el);
-  } else {
-    rightWordStack.appendChild(el);
-  }
-
-  wordElements.push({
-    el,
-    index
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      card.classList.remove("is-revealed");
+    }, 5000);
   });
 });
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
+/* 커서 점 따라다니기 */
+let mouseX = -100;
+let mouseY = -100;
+let dotX = -100;
+let dotY = -100;
 
-function updateWordAnimation() {
-  const rect = heroScroll.getBoundingClientRect();
-  const scrollable = heroScroll.offsetHeight - window.innerHeight;
-
-  if (scrollable <= 0) return;
-
-  const progress = clamp(-rect.top / scrollable, 0, 1);
-  const segment = 1 / words.length;
-
-  wordElements.forEach(({ el, index }) => {
-    const start = segment * index;
-    const local = (progress - start) / segment;
-
-    if (local > 0 && local < 1) {
-      let opacity = 0;
-      let y = 0;
-
-      if (local < 0.25) {
-        const t = local / 0.25;
-        opacity = t;
-        y = 90 * (1 - t);
-      } else if (local < 0.72) {
-        opacity = 1;
-        y = 0;
-      } else {
-        const t = (local - 0.72) / 0.28;
-        opacity = 1 - t;
-        y = -90 * t;
-      }
-
-      el.style.opacity = opacity;
-      el.style.transform = `translateY(${y}px)`;
-    } else {
-      el.style.opacity = 0;
-      el.style.transform = "translateY(90px)";
-    }
-  });
-}
-
-function updateFadeBlocks() {
-  const trigger = window.innerHeight * 0.88;
-
-  fadeBlocks.forEach((block) => {
-    const rect = block.getBoundingClientRect();
-
-    if (rect.top < trigger) {
-      block.classList.add("is-visible");
-    }
-  });
-}
-
-function onScroll() {
-  updateWordAnimation();
-  updateFadeBlocks();
-}
-
-window.addEventListener("scroll", onScroll, { passive: true });
-window.addEventListener("resize", onScroll);
-
-window.addEventListener("load", () => {
-  onScroll();
+window.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX + 14;  // 오른쪽
+  mouseY = e.clientY + 14;  // 대각선 아래
 });
+
+function animateCursorDot() {
+  dotX += (mouseX - dotX) * 0.18;
+  dotY += (mouseY - dotY) * 0.18;
+
+  cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0)`;
+
+  requestAnimationFrame(animateCursorDot);
+}
+
+animateCursorDot();
