@@ -1,4 +1,5 @@
 const siteShell = document.getElementById("siteShell");
+const overlayGroup = document.getElementById("overlayGroup");
 const overlayTriggers = document.querySelectorAll(".overlay-trigger");
 const cursorDot = document.getElementById("cursorDot");
 const centerVideo = document.getElementById("centerVideo");
@@ -8,7 +9,9 @@ let isRevealed = false;
 let unmaskedCount = 0;
 const totalTriggers = overlayTriggers.length;
 
-/* 배경 텍스트 글자 단위 분해 */
+let introTypingDone = false;
+
+/* 1) 배경 텍스트 글자 단위 분해 */
 heroTextBlocks.forEach((block) => {
   const rawText = block.textContent || "";
   block.innerHTML = "";
@@ -27,9 +30,38 @@ heroTextBlocks.forEach((block) => {
   });
 });
 
-const letters = document.querySelectorAll(".hero-text span:not(.space)");
+const allLetters = document.querySelectorAll(".hero-text span");
+const repelLetters = document.querySelectorAll(".hero-text span:not(.space)");
 
-/* 커서 */
+/* 2) 인트로 타이핑 애니메이션 */
+async function runIntroTyping() {
+  const letters = [...allLetters];
+  const speed = 5;          // 글자 간격
+  const paragraphDelay = 5; // 문단 체감 쉼
+
+  for (let i = 0; i < letters.length; i++) {
+    const letter = letters[i];
+    letter.classList.add("is-visible");
+
+    const isPeriodLike =
+      letter.textContent === "." ||
+      letter.textContent === "!" ||
+      letter.textContent === "?" ||
+      letter.textContent === "다";
+
+    await new Promise((resolve) =>
+      setTimeout(resolve, isPeriodLike ? paragraphDelay : speed)
+    );
+  }
+
+  introTypingDone = true;
+
+  if (overlayGroup) {
+    overlayGroup.classList.add("is-visible");
+  }
+}
+
+/* 3) 커서 */
 let mouseX = window.innerWidth * 0.5;
 let mouseY = window.innerHeight * 0.5;
 let dotX = -100;
@@ -40,14 +72,14 @@ window.addEventListener("mousemove", (event) => {
   mouseY = event.clientY;
 });
 
-/* 글자 좌우 repel */
+/* 4) 글자 좌우 repel */
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const REPEL_RADIUS = 125;
 const REPEL_FORCE = 24;
 
 function animateRepel() {
-  if (!prefersReducedMotion && !isRevealed) {
-    letters.forEach((letter) => {
+  if (!prefersReducedMotion && !isRevealed && introTypingDone) {
+    repelLetters.forEach((letter) => {
       const rect = letter.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
@@ -66,7 +98,7 @@ function animateRepel() {
       }
     });
   } else {
-    letters.forEach((letter) => {
+    repelLetters.forEach((letter) => {
       letter.style.transform = "translateX(0px)";
     });
   }
@@ -76,7 +108,7 @@ function animateRepel() {
 
 animateRepel();
 
-/* 커서 점 */
+/* 5) 커서 점 */
 function animateCursorDot() {
   dotX += (mouseX + 14 - dotX) * 0.16;
   dotY += (mouseY + 14 - dotY) * 0.16;
@@ -90,7 +122,7 @@ function animateCursorDot() {
 
 animateCursorDot();
 
-/* 영상 씬 */
+/* 6) 영상 씬 */
 function revealVideoScene() {
   if (isRevealed) return;
 
@@ -105,8 +137,9 @@ function revealVideoScene() {
   }
 }
 
-/* 마스크만 제거 */
+/* 7) 마스크만 제거 */
 function unmaskTrigger(trigger) {
+  if (!introTypingDone) return;
   if (!trigger || trigger.classList.contains("is-unmasked")) return;
 
   trigger.classList.add("is-unmasked");
@@ -137,3 +170,12 @@ window.addEventListener("keydown", (event) => {
     unmaskTrigger(active);
   }
 });
+
+/* 8) 시작 */
+if (prefersReducedMotion) {
+  allLetters.forEach((letter) => letter.classList.add("is-visible"));
+  introTypingDone = true;
+  if (overlayGroup) overlayGroup.classList.add("is-visible");
+} else {
+  runIntroTyping();
+}

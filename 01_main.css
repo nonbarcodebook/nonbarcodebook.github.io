@@ -229,10 +229,34 @@ body {
 
 
 /* 오버레이 */
+/* 배경 텍스트 타이핑용 */
+.hero-text span {
+  display: inline-block;
+  will-change: transform, opacity;
+  transition: transform 120ms ease-out;
+  opacity: 0;
+}
+
+.hero-text span.is-visible {
+  opacity: 1;
+}
+
+/* 오버레이는 처음에 숨김 */
 .overlay-group {
   position: absolute;
   inset: 0;
   z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 1500ms ease, visibility 1500ms ease;
+}
+
+/* 타이핑 끝난 뒤 표시 */
+.overlay-group.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .overlay-trigger {
@@ -311,7 +335,6 @@ body {
 .trigger-3 {
   top: 34.5%;
   left: 28.5%;
-  font-size: var(--trigger-font);
 }
 
 .trigger-4 {
@@ -340,10 +363,9 @@ body {
 }
 
 .mask-3 {
-  left: 120%;
-  width: clamp(150px, 16vw, 280px);
+  left: -5%;
+  width: 110%;
   height: 120%;
-  transform: translate(-50%, -50%);
   background-image: url("./02_Images/01-3_Hero/Overlay_Images/Overlay_03.png");
 }
 
