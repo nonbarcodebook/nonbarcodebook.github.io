@@ -42,8 +42,8 @@ window.addEventListener("mousemove", (event) => {
 
 /* 글자 좌우 repel */
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const REPEL_RADIUS = 78;
-const REPEL_FORCE = 18;
+const REPEL_RADIUS = 125;
+const REPEL_FORCE = 24;
 
 function animateRepel() {
   if (!prefersReducedMotion && !isRevealed) {

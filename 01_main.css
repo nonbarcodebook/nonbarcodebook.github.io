@@ -67,8 +67,8 @@ body {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 100;
-  padding: var(--nav-pad-top) var(--nav-pad-x) 0;
-  margin: 10px 60px;
+  padding: var(--nav-pad-top) clamp(30px, 4vw, 60px) 0;
+  margin: 0;
 }
 
 .top-nav__inner {
@@ -190,22 +190,23 @@ body {
 
 /* 인트로 */
 .intro-layer {
-  align-items: center;
-  width: 90%;
-  margin-top: 2%;
-  position: absolute center;
+  position: absolute;
   inset: 0;
   z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding-top: clamp(8px, 1vw, 18px);
   transition: opacity var(--reveal-duration) ease, visibility var(--reveal-duration) ease;
 }
 
 .bg-copy {
-  width: 100vw;
+  width: min(100%, 1560px);
   max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--copy-gap);
   font-family: 'NANUM';
+  padding-inline: clamp(12px, 2.2vw, 40px);
 }
 
 .hero-text {
@@ -225,6 +226,7 @@ body {
 .hero-text span.space {
   width: 0.34em;
 }
+
 
 /* 오버레이 */
 .overlay-group {
@@ -269,6 +271,24 @@ body {
     transform 360ms ease,
     filter 360ms ease;
 }
+.trigger-bracket {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(6px, 0.8vw, 14px);
+}
+
+.bracket-left,
+.bracket-right {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+.bracket-gap {
+  display: inline-block;
+  width: clamp(150px, 16vw, 280px);
+  height: 1px;
+}
 
 /* 마스크만 사라짐 */
 .overlay-trigger.is-unmasked .trigger-mask {
@@ -289,9 +309,9 @@ body {
 }
 
 .trigger-3 {
-  top: 34.7%;
-  left: 24.6%;
-  font-size: clamp(18px, 1.35vw, 34px);
+  top: 34.5%;
+  left: 28.5%;
+  font-size: var(--trigger-font);
 }
 
 .trigger-4 {
@@ -320,9 +340,10 @@ body {
 }
 
 .mask-3 {
-  left: 18%;
-  width: 64%;
-  height: 60%;
+  left: 120%;
+  width: clamp(150px, 16vw, 280px);
+  height: 120%;
+  transform: translate(-50%, -50%);
   background-image: url("./02_Images/01-3_Hero/Overlay_Images/Overlay_03.png");
 }
 
