@@ -5,10 +5,10 @@ const centerVideo = document.getElementById("centerVideo");
 const heroTextBlocks = document.querySelectorAll(".hero-text");
 
 let isRevealed = false;
-let goneCount = 0;
+let unmaskedCount = 0;
 const totalTriggers = overlayTriggers.length;
 
-/* 1) 배경 텍스트 글자 단위 분해 */
+/* 배경 텍스트 글자 단위 분해 */
 heroTextBlocks.forEach((block) => {
   const rawText = block.textContent || "";
   block.innerHTML = "";
@@ -29,7 +29,7 @@ heroTextBlocks.forEach((block) => {
 
 const letters = document.querySelectorAll(".hero-text span:not(.space)");
 
-/* 2) 커서 */
+/* 커서 */
 let mouseX = window.innerWidth * 0.5;
 let mouseY = window.innerHeight * 0.5;
 let dotX = -100;
@@ -40,7 +40,7 @@ window.addEventListener("mousemove", (event) => {
   mouseY = event.clientY;
 });
 
-/* 3) 글자 좌우 repel */
+/* 글자 좌우 repel */
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const REPEL_RADIUS = 78;
 const REPEL_FORCE = 18;
@@ -76,7 +76,7 @@ function animateRepel() {
 
 animateRepel();
 
-/* 4) 커서 점 */
+/* 커서 점 */
 function animateCursorDot() {
   dotX += (mouseX + 14 - dotX) * 0.16;
   dotY += (mouseY + 14 - dotY) * 0.16;
@@ -90,7 +90,7 @@ function animateCursorDot() {
 
 animateCursorDot();
 
-/* 5) reveal */
+/* 영상 씬 */
 function revealVideoScene() {
   if (isRevealed) return;
 
@@ -105,34 +105,35 @@ function revealVideoScene() {
   }
 }
 
-/* 6) 개별 오버레이 제거 */
-function removeTrigger(trigger) {
-  if (!trigger || trigger.classList.contains("is-gone")) return;
+/* 마스크만 제거 */
+function unmaskTrigger(trigger) {
+  if (!trigger || trigger.classList.contains("is-unmasked")) return;
 
-  trigger.classList.add("is-gone");
-  goneCount += 1;
+  trigger.classList.add("is-unmasked");
+  unmaskedCount += 1;
 
-  if (goneCount >= totalTriggers) {
+  if (unmaskedCount >= totalTriggers) {
     setTimeout(() => {
       revealVideoScene();
-    }, 420);
+    }, 380);
   }
 }
 
 overlayTriggers.forEach((trigger) => {
-  trigger.addEventListener("mouseenter", () => removeTrigger(trigger), { passive: true });
-  trigger.addEventListener("click", () => removeTrigger(trigger), { passive: true });
-  trigger.addEventListener("touchstart", () => removeTrigger(trigger), { passive: true });
+  trigger.addEventListener("mouseenter", () => unmaskTrigger(trigger), { passive: true });
+  trigger.addEventListener("click", () => unmaskTrigger(trigger), { passive: true });
+  trigger.addEventListener("touchstart", () => unmaskTrigger(trigger), { passive: true });
 });
 
 window.addEventListener("keydown", (event) => {
   const active = document.activeElement;
+
   if (
     (event.key === "Enter" || event.key === " ") &&
     active &&
     active.classList.contains("overlay-trigger")
   ) {
     event.preventDefault();
-    removeTrigger(active);
+    unmaskTrigger(active);
   }
 });
